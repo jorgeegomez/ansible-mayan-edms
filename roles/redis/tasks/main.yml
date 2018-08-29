@@ -1,40 +1,45 @@
 ---
 - name: Install dependencies
-  apt: >
-    pkg=python3-software-properties
-    state=present
-    update-cache=yes
+  apt:
+    pkg: 'python3-software-properties'
+    state: 'present'
+    update-cache: 'yes'
   when: localdev is not defined
 
 - name: Add repository
-  apt_repository: >
-    repo=ppa:chris-lea/redis-server
-    state=present
+  apt_repository:
+    repo: 'ppa:chris-lea/redis-server'
+    state: 'present'
   when: localdev is not defined
 
 - name: Install latest version
-  apt: >
-    pkg={{ item }}
-    state=present
-    update-cache=yes
+  apt:
+    pkg: '{{ item }}'
+    state: 'present'
+    update-cache: 'yes'
   register: redis_install
   with_items:
     - redis-server
   when: localdev is not defined
 
+- name: Enable redis server
+  systemd:
+    name: 'redis-server'
+    state: 'enabled'
+
 - name: Create data directory
-  file: >
-    state=directory
-    path={{ redis.config.dir }}
-    owner={{ redis.user }}
-    group={{ redis.group }}
-    recurse=yes
+  file:
+    state: 'directory'
+    path: '{{ redis.config.dir }}'
+    owner: '{{ redis.user }}'
+    group: '{{ redis.group }}'
+    recurse: 'yes'
   when: localdev is not defined
 
 - name: Install config
-  template: >
-    src=root/etc/redis/redis.conf.j2
-    dest=/etc/redis/redis.conf
+  template:
+    src: 'root/etc/redis/redis.conf.j2'
+    dest: '/etc/redis/redis.conf'
   notify:
     - restart redis
   when: localdev is not defined
