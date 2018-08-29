@@ -2,6 +2,6 @@
 - name: Supervisor - Install latest
   apt: >
     pkg=supervisor
-    state=installed
+    state=present
     update-cache=yes
   when: ansible_distribution == 'Ubuntu'

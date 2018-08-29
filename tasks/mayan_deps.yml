@@ -2,7 +2,7 @@
 - name: Install prereqs for mayan-edms
   apt: >
     pkg={{ item }}
-    state=installed
+    state=present
     force=yes
   with_items:
     - libjpeg-dev

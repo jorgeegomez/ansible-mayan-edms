@@ -1,7 +1,7 @@
 ---
 
 - name: install sysstat
-  apt: pkg=sysstat state=installed
+  apt: pkg=sysstat state=present
 
 - name: sysstat cron file
   template: >

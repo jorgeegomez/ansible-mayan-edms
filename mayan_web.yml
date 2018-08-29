@@ -1,15 +1,9 @@
 ---
 - name: Configure mayan web server
   hosts: mayan
-  sudo: true
-  vars:
-      nginx_ssl_cert_source: ""
-      nginx_ssl_key_source: ""
-      nginx_ssl_key_name: ""
-      nginx_ssl_cert_file_name: ""
-      nginx_ssl_key_password: ""
+  become: true
   pre_tasks:
-    - include: tasks/mayan_deps.yml
+    - import_tasks: tasks/mayan_deps.yml
   roles:
     - role: common
       tags: configuration
@@ -27,13 +21,7 @@
       tags: configuration
     - role: mayan-edms
   tasks:
-    - include: tasks/mayan.yml
-      template_root: mayan
-    - include: tasks/uwsgi.yml
-      wsgi_app_name: mayan
-      template_root: mayan
-    - include: tasks/nginx.yml
-      nginx_app_name: mayan
-      template_root: mayan
-    - include: tasks/mayan_super.yml
-      template_root: mayan
+    - import_tasks: tasks/mayan.yml
+    - import_tasks: tasks/uwsgi.yml
+    - import_tasks: tasks/nginx.yml
+    - import_tasks: tasks/mayan_super.yml

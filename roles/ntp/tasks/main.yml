@@ -4,16 +4,23 @@
   tags: [ 'configuration', 'package', 'service', 'ntp' ]
 
 - name: Install the required packages in Debian derivatives
-  apt: name=ntp state={{ ntp_pkg_state }}
+  apt:
+    name: 'ntp'
+    state: '{{ ntp_pkg_state }}'
   when: ansible_os_family == 'Debian'
   tags: [ 'ntp' ]
 
 - name: Copy the ntp.conf template file
-  template: src=ntp.conf.j2 dest=/etc/ntp.conf
+  template:
+    src: 'ntp.conf.j2'
+    dest: '/etc/ntp.conf'
   notify:
   - restart ntp
   tags: [ 'ntp' ]
 
 - name: Start/stop ntp service
-  service: name={{ ntp_service_name }} state={{ ntp_service_state }} enabled={{ ntp_service_enabled }} pattern='/ntpd'
+  systemd:
+    name: '{{ ntp_service_name }}'
+    state: '{{ ntp_service_state }}'
+    enabled: '{{ ntp_service_enabled }}'
   tags: [ 'ntp' ]

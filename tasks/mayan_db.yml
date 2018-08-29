@@ -1,7 +1,7 @@
 ---
 - include: postgres.yml
 - name: postgres - create mayan database
-  sudo_user: "{{ pg_user or ansible_ssh_user }}"
+  become_user: "{{ pg_user or ansible_ssh_user }}"
   postgresql_db: >
     name=mayan
     encoding='UTF-8'
@@ -15,7 +15,7 @@
   register: mayan_db_create
 
 - name: postgres - create mayan user
-  sudo_user: "{{ pg_user or ansible_ssh_user }}"
+  become_user: "{{ pg_user or ansible_ssh_user }}"
   postgresql_user: >
     db=mayan
     name=mayan
@@ -24,10 +24,11 @@
     login_password="{{ pg_login_password|default('')}}"
     login_host="{{ pg_host|default('') }}"
     port="{{ pg_port|default(5432) }}"
+    encrypted=yes
   when: mayan_db_create.changed
 
 - name: postgres - apply privileges for mayan user
-  sudo_user: "{{ pg_user or ansible_ssh_user }}"
+  become_user: "{{ pg_user or ansible_ssh_user }}"
   postgresql_privs: >
     db=mayan
     type=schema
