@@ -25,7 +25,7 @@
 - name: Enable redis server
   systemd:
     name: 'redis-server'
-    state: 'enabled'
+    enabled: 'yes'
 
 - name: Create data directory
   file:
