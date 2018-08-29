@@ -43,6 +43,6 @@
   when: localdev is not defined and rds_instance is not defined
 
 - name: Enable SSL in local Postgresql Instance
-  action: lineinfile dest=/etc/postgresql/9.4/main/pg_hba.conf insertafter="^#\sIPv4\slocal.+" line="hostssl     all  all  0.0.0.0/0  md5"
+  action: lineinfile dest=/etc/postgresql/{{ postgresql_version }}/main/pg_hba.conf insertafter="^#\sIPv4\slocal.+" line="hostssl     all  all  0.0.0.0/0  md5"
   when: localdev is not defined and rds_instance is not defined and skip_pg_ssl is not defined
 
